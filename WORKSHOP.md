@@ -74,7 +74,13 @@ The hydration logic lives in a shared, reusable workflow:
 Your repository only needs a small workflow that calls it.
 
 1. Read `helm-config.yaml`. Which environments will be rendered, and with which values files?
-2. Create `.github/workflows/helm-hydration.yaml`:
+2. Create the workflow directory:
+
+   ```bash
+   mkdir -p .github/workflows
+   ```
+
+   Then create `.github/workflows/helm-hydration.yaml`:
 
    ```yaml
    name: Helm hydration
