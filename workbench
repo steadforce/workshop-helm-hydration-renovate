@@ -32,7 +32,7 @@ fi
 
 # Only the first workbench publishes the Argo CD port, so a second terminal still starts.
 PORT=""
-[ -z "$(docker ps -q --filter publish=8080)" ] && PORT="-p 8080:8080"
+[ -z "$(docker ps -q --filter publish=8080)" ] && PORT="-p 127.0.0.1:8080:8080"
 
 exec docker run --rm $TTY $PORT \
   -v /var/run/docker.sock:/var/run/docker.sock \
