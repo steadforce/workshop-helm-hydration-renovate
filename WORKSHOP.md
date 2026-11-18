@@ -301,6 +301,13 @@ Each environment branch is promoted on its own, by merging its pull request.
        - values-prod.yaml
    ```
 
+   Commit only that file and push:
+
+   ```bash
+   git commit helm-config.yaml -m "Add the staging environment"
+   git push
+   ```
+
    **Result:** The workflow creates the branch `environments/staging` and opens a pull request for it.
    You did not touch the workflow.
 
