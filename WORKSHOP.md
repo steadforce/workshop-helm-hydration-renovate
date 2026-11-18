@@ -272,7 +272,22 @@ Each environment branch is promoted on its own, by merging its pull request.
 
 2. **Promote to prod:** When dev looks good, merge the prod pull request (and the default one).
 
-3. **Environment-specific change:** Change a resource limit in `values-prod.yaml`, then commit and push.
+3. **Environment-specific change:** Raise the memory limit in `values-prod.yaml`:
+
+   ```yaml
+   renovate:
+     resources:
+       limits:
+         cpu: 1500m
+         memory: 2Gi   # was 1536Mi
+   ```
+
+   Commit only that file and push:
+
+   ```bash
+   git commit values-prod.yaml -m "Raise the memory limit in prod"
+   git push
+   ```
 
    **Result:** Only a prod pull request is opened, because the dev and default manifests did not change.
 
