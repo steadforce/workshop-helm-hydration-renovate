@@ -213,7 +213,6 @@ We simulate that by hand.
 2. Commit and push to `main`, as Renovate's automerge would. Commit only `Chart.yaml`: your
    `argocd/application-dev.yaml` from Lab 2 stays a local change.
 
-
    ```bash
    git commit Chart.yaml -m "Update Helm release renovate to v44.1.0"
    git push
