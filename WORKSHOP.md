@@ -142,6 +142,11 @@ Your repository only needs a small workflow that calls it.
 Argo CD watches the `environments/dev` branch. It never runs Helm: it applies the
 plain YAML that you reviewed in the pull request.
 
+> **Merge the Lab 1 pull requests first.** Until the dev pull request is merged, the branch
+> `environments/dev` holds no manifests. Argo CD then reports `Failed to load target state: failed to
+> generate manifest for source 1 of 1: rpc error: code = Unknown desc = hydrated-manifests: app path does
+> not exist`.
+
 All commands in this lab run inside the workbench. Start it from the root of your clone:
 
 ```bash
@@ -306,6 +311,7 @@ Each environment branch is promoted on its own, by merging its pull request.
 | `GitHub Actions is not permitted to create or approve pull requests` | Lab 0, step 2: check the box and save |
 | The hydrate job fails with `the lock file (Chart.lock) is out of sync with the dependencies file (Chart.yaml)` | You changed the version in `Chart.yaml` only. Run `helm dependency update` in the workbench and commit `Chart.lock` too. |
 | Argo CD shows `namespaces "renovate" not found` | `destination.namespace` in the Application must be `renovate` |
+| Argo CD shows `hydrated-manifests: app path does not exist` | The dev pull request from Lab 1 is not merged yet. Merge it, then click **Refresh** in Argo CD. |
 | Argo CD shows `Repository not found` | Check `repoURL`. Your fork must be public. |
 | Redis pod in `ImagePullBackOff` | `values.yaml` must keep the `bitnamilegacy/redis` image override |
 | `kubectl` in the workbench: `connection refused` on `127.0.0.1` | Run `docker network connect kind "$HOSTNAME"` and `kind export kubeconfig --internal --name hydration-workshop` |
