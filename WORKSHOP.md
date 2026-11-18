@@ -33,6 +33,7 @@ docker pull ghcr.io/steadforce/steadops/workbenches/k8s:sha-9d99d07
 | File | Purpose |
 |------|---------|
 | `Chart.yaml` | Umbrella chart. Its only dependency is the upstream `renovate` chart. |
+| `Chart.lock` | Pins the dependency version. The hydration workflow installs exactly this version. |
 | `values.yaml` | Values for all environments |
 | `values-dev.yaml`, `values-prod.yaml` | Environment-specific overrides |
 | `helm-config.yaml` | Tells the hydration workflow which environments exist, the release name, the namespace and the values files per environment |
@@ -124,7 +125,6 @@ Your repository only needs a small workflow that calls it.
 
 - Three new branches: `environments/default`, `environments/dev` and `environments/prod`
 - Three pull requests titled `💧 [<environment>] …`, one per environment
-- A warning that `Chart.lock` is not committed. You can ignore it in this workshop.
 
 **Explore:**
 
@@ -210,11 +210,17 @@ We simulate that by hand.
 
    The YAML anchor `&version` sets the chart version and the dependency version at once.
 
-2. Commit and push to `main`, as Renovate's automerge would. Commit only `Chart.yaml`: your
-   `argocd/application-dev.yaml` from Lab 2 stays a local change.
+   Renovate would also update `Chart.lock`. Do the same inside the workbench:
 
    ```bash
-   git commit Chart.yaml -m "Update Helm release renovate to v44.1.0"
+   helm dependency update
+   ```
+
+2. Commit and push to `main`, as Renovate's automerge would. Commit only `Chart.yaml` and
+   `Chart.lock`: your `argocd/application-dev.yaml` from Lab 2 stays a local change.
+
+   ```bash
+   git commit Chart.yaml Chart.lock -m "Update Helm release renovate to v44.1.0"
    git push
    ```
 
@@ -227,7 +233,7 @@ We simulate that by hand.
 - `values.yaml` still says `redis.enabled: true`. Why did nobody complain?
 - Would you have noticed any of this when reviewing Renovate's one-line change to `Chart.yaml`?
 
-3. **Patch bundling:** Before you merge any of these pull requests, change the version to `44.1.1`, then commit and push again.
+3. **Patch bundling:** Before you merge any of these pull requests, change the version to `44.1.1`, run `helm dependency update` again, then commit `Chart.yaml` and `Chart.lock` and push again.
    Instead of a second set of pull requests, the existing ones are updated: the branch is named
    `hydration-pull-request/<environment>-44.1.x`, so all patch releases of `44.1` land in one pull request.
 
@@ -298,7 +304,7 @@ Each environment branch is promoted on its own, by merging its pull request.
 | `git commit` says `Author identity unknown` | Lab 0, step 5: set `user.name` and `user.email` |
 | `.github/workflows/helm-hydration.yaml` is not picked up | The file must be in `.github/workflows/` at the repository root: `mkdir -p .github/workflows` |
 | `GitHub Actions is not permitted to create or approve pull requests` | Lab 0, step 2: check the box and save |
-| `Chart.lock is not committed` warning | Expected in this workshop, ignore it |
+| The hydrate job fails with `the lock file (Chart.lock) is out of sync with the dependencies file (Chart.yaml)` | You changed the version in `Chart.yaml` only. Run `helm dependency update` in the workbench and commit `Chart.lock` too. |
 | Argo CD shows `namespaces "renovate" not found` | `destination.namespace` in the Application must be `renovate` |
 | Argo CD shows `Repository not found` | Check `repoURL`. Your fork must be public. |
 | Redis pod in `ImagePullBackOff` | `values.yaml` must keep the `bitnamilegacy/redis` image override |
