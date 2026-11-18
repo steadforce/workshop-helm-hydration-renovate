@@ -18,4 +18,5 @@ The hands-on exercises are in [WORKSHOP.md](./WORKSHOP.md).
 
 ## Slides
 
-The workshop slides can be found [here](./slides/)
+The workshop slides are in [slides/workshop.pdf](./slides/workshop.pdf).
+They are only a fallback for the presenter, the labs are in [WORKSHOP.md](./WORKSHOP.md).
