@@ -208,7 +208,7 @@ We simulate that by hand.
 
 **Explore the dev pull request:**
 
-- What happened to the files below `hydrated-manifests/charts/renovate/charts/redis/`?
+- What happened to the files below `hydrated-manifests/renovate/renovate/charts/renovate/charts/redis/`?
 - What happened to `RENOVATE_REDIS_URL` in the CronJob?
 - `values.yaml` still says `redis.enabled: true`. Why did nobody complain?
 - Would you have noticed any of this when reviewing Renovate's one-line change to `Chart.yaml`?
