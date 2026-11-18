@@ -238,7 +238,20 @@ We simulate that by hand.
 - `values.yaml` still says `redis.enabled: true`. Why did nobody complain?
 - Would you have noticed any of this when reviewing Renovate's one-line change to `Chart.yaml`?
 
-3. **Patch bundling:** Before you merge any of these pull requests, change the version to `44.1.1`, run `helm dependency update` again, then commit `Chart.yaml` and `Chart.lock` and push again.
+3. **Patch bundling:** Before you merge any of these pull requests, change the version to `44.1.1`:
+
+   ```yaml
+   version: &version 44.1.1
+   ```
+
+   Update `Chart.lock` again, then commit both files and push:
+
+   ```bash
+   helm dependency update
+   git commit Chart.yaml Chart.lock -m "Update Helm release renovate to v44.1.1"
+   git push
+   ```
+
    Instead of a second set of pull requests, the existing ones are updated: the branch is named
    `hydration-pull-request/<environment>-44.1.x`, so all patch releases of `44.1` land in one pull request.
 
