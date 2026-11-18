@@ -12,6 +12,10 @@ used is specified in `Chart.yaml` in the `dependencies` section.
 See the [Helm docs](https://helm.sh/docs/topics/charts/#chart-dependencies)
 for details.
 
+## Workshop
+
+The hands-on exercises are in [WORKSHOP.md](./WORKSHOP.md).
+
 ## Slides
 
 The workshop slides can be found [here](./slides/)

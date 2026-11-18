@@ -1,6 +1,10 @@
 renovate:
   redis:
     enabled: true
+    # Bitnami removed its versioned images from docker.io/bitnami.
+    # The image referenced by this chart version only exists in bitnamilegacy.
+    image:
+      repository: bitnamilegacy/redis
 
   renovate:
     config: |

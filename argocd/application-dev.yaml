@@ -1,0 +1,30 @@
+# Argo CD Application that deploys the hydrated manifests of the dev environment.
+#
+# Replace <your-github-user> with the GitHub account that holds your fork.
+# Argo CD reads plain YAML from the environment branch: no Helm runs in the cluster.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: renovate-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/<your-github-user>/workshop-helm-hydration-renovate.git
+    # The branch the hydration pull requests for dev are merged into
+    targetRevision: environments/dev
+    path: hydrated-manifests
+    directory:
+      # The rendered manifests are spread over nested chart folders
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    # Must match `namespace` in helm-config.yaml, the manifests carry it
+    namespace: renovate
+  syncPolicy:
+    automated:
+      # Delete resources that disappear from the environment branch
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
