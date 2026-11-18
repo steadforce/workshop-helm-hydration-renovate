@@ -290,6 +290,8 @@ Each environment branch is promoted on its own, by merging its pull request.
    ```
 
    **Result:** Only a prod pull request is opened, because the dev and default manifests did not change.
+   Without a chart version change there is no version arrow in the title: it is the commit message,
+   for example `💧 [prod] renovate: Raise the memory limit in prod`.
 
 4. **New environment:** Add a `staging` environment to `helm-config.yaml`:
 
