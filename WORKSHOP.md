@@ -57,7 +57,14 @@ docker pull ghcr.io/steadforce/steadops/workbenches/k8s:sha-9d99d07
    cd workshop-helm-hydration-renovate
    ```
 
-5. If you have not pulled the workbench image yet, start the download now. It runs while you work on Lab 1:
+5. If git does not know who you are yet, set your identity. Lab 1 creates a commit:
+
+   ```bash
+   git config user.name "<your name>"
+   git config user.email "<your email>"
+   ```
+
+6. If you have not pulled the workbench image yet, start the download now. It runs while you work on Lab 1:
 
    ```bash
    ./workbench exit
@@ -203,10 +210,12 @@ We simulate that by hand.
 
    The YAML anchor `&version` sets the chart version and the dependency version at once.
 
-2. Commit and push to `main`, as Renovate's automerge would:
+2. Commit and push to `main`, as Renovate's automerge would. Commit only `Chart.yaml`: your
+   `argocd/application-dev.yaml` from Lab 2 stays a local change.
+
 
    ```bash
-   git commit -am "Update Helm release renovate to v44.1.0"
+   git commit Chart.yaml -m "Update Helm release renovate to v44.1.0"
    git push
    ```
 
@@ -219,7 +228,7 @@ We simulate that by hand.
 - `values.yaml` still says `redis.enabled: true`. Why did nobody complain?
 - Would you have noticed any of this when reviewing Renovate's one-line change to `Chart.yaml`?
 
-3. **Patch bundling:** Before merging, change the version to `44.1.1`, then commit and push again.
+3. **Patch bundling:** Before you merge any of these pull requests, change the version to `44.1.1`, then commit and push again.
    Instead of a second set of pull requests, the existing ones are updated: the branch is named
    `hydration-pull-request/<environment>-44.1.x`, so all patch releases of `44.1` land in one pull request.
 
@@ -285,6 +294,10 @@ Each environment branch is promoted on its own, by merging its pull request.
 | Symptom | Fix |
 |---------|-----|
 | The workflow does not start | **Actions** tab: enable workflows for your fork |
+| The run fails with `Resource not accessible by integration` | Lab 0, step 2: set **Workflow permissions** to read and write, save, and re-run the workflow |
+| The run fails at once on the `uses:` line of the hydration workflow | Actions must allow reusable workflows (Lab 0, step 2), and the version in `uses:` must exist |
+| `git commit` says `Author identity unknown` | Lab 0, step 5: set `user.name` and `user.email` |
+| `.github/workflows/helm-hydration.yaml` is not picked up | The file must be in `.github/workflows/` at the repository root: `mkdir -p .github/workflows` |
 | `GitHub Actions is not permitted to create or approve pull requests` | Lab 0, step 2: check the box and save |
 | `Chart.lock is not committed` warning | Expected in this workshop, ignore it |
 | Argo CD shows `namespaces "renovate" not found` | `destination.namespace` in the Application must be `renovate` |
